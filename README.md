@@ -85,9 +85,12 @@ Projected demand increases were incorporated into our scenario planning to enhan
    - Define decision variables per route.
    - Formulate the objective function for maximizing total revenue.
    - Apply constraints based on the maximum number of passengers and projected tourism growth.
-
 3. **Comparative Analysis**: The approach allowed us to boost occupancy rates from an average of 93-95% in 2022 to over 97% in most routes for 2025.
 4. **Revenue Outcomes**: Increased revenue from £20.6M to £21.5M, demonstrating the efficacy of optimized allocation.
+![image](https://github.com/user-attachments/assets/00512e3e-eebc-40b5-a442-0d4ad3577c35)
+
+
+![image](https://github.com/user-attachments/assets/531707bd-6b5e-4d70-85c2-8409bdc3c2f3)
 
 ---
 
@@ -107,9 +110,11 @@ Projected demand increases were incorporated into our scenario planning to enhan
 
 ### Results
 This cabin allocation approach maximized revenue by ensuring high occupancy for all cabin types, tailored per route.
+![image](https://github.com/user-attachments/assets/ca5b49b2-1cb3-4933-9a4d-c416189e66a1)
+
+
 
 ---
-
 ## Estimating Cancellation Rates
 
 Using historical data:
