@@ -1,0 +1,78 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct 29 16:52:46 2024
+
+@author: Cheta
+"""
+
+# Import the PuLP library for linear programming
+import pulp
+
+# Data: A dictionary containing details about various cruise routes
+data = {
+    "Route": [
+        "AKL-DXB", "AKL-HKG", "AKL-SIN", "AKL-SOU", "AKL-SYD", 
+        "BNE-HKG", "BNE-SOU", "DXB-SOU", "HKG-DXB", "HKG-SOU", 
+        "SFO-AKL", "SFO-HKG", "SFO-SIN", "SFO-SYD", "SIN-DXB", 
+        "SIN-SOU", "SOU-AKL", "SOU-BNE", "SOU-HKG", "SOU-SFO", 
+        "SOU-SIN", "SOU-SOU", "SOU-SYD", "SYD-BNE", "SYD-DXB", 
+        "SYD-HKG", "SYD-SIN", "SYD-SOU"
+    ],
+    
+    # Number of passengers already allocated for each route
+    "Number of Passengers": [10, 14, 10, 61, 172, 137, 77, 444,
+                             365, 148, 76, 32, 14, 362, 104, 160,
+                             160, 75, 3, 479, 10, 811, 418,
+                             124, 9, 345, 238, 223],
+    
+    # Potential increase in the number of passengers for each route
+    "Increase": [3, 0, 2, 0, 0, 0, 0,
+                 0, 102, 0, 0, 0, 0, 79, 29, 0,
+                 0, 0, 0, 158, 0, 0, 0, 27,
+                 3, 0, 47, 0],
+    
+    # Average price per passenger for each route
+    "Average Price pp": [4348, 1483, 2597, 15486, 275, 
+                         935, 4931, 1497, 1653, 3493, 
+                         1192, 3931, 5089, 4141, 998, 
+                         2827, 3690, 4075, 7176, 1666, 
+                         6077, 10302, 5734, 277, 3337, 
+                         1443, 2256, 5773],
+    
+    # Duration of each cruise in nights
+    "Duration (nights)": [40, 23, 29, 59, 4, 16, 52, 19,
+                          17, 36, 16, 39, 45, 20, 11, 30,
+                          40, 47, 63, 24, 69, 99, 44, 3,
+                          36, 19, 25, 55]
+}
+
+# Create a linear programming problem instance
+# The goal is to maximize total revenue
+prob = pulp.LpProblem("MaximizeRevenue", pulp.LpMaximize)
+
+# Decision variables: Number of passengers allocated to each route
+# These variables must be non-negative integers
+passengers = {route: pulp.LpVariable(route, lowBound=0, cat='Integer') 
+              for route in data["Route"]}
+
+# Objective function: Maximize total revenue
+# The total revenue is calculated as the sum of the number of passengers
+# allocated to each route multiplied by the average price per passenger for that route
+prob += pulp.lpSum(passengers[route] * data["Average Price pp"][i] 
+                   for i, route in enumerate(data["Route"]))
+
+# Constraints: Ensure that the number of passengers allocated to each route 
+# does not exceed the maximum capacity (number of passengers plus potential increase)
+for i, route in enumerate(data["Route"]):
+    prob += passengers[route] <= (data["Number of Passengers"][i] + data["Increase"][i])
+
+# Solve the linear programming problem
+prob.solve()
+
+# Print the optimal solution: the number of passengers allocated to each route
+print("Optimal passenger allocation:")
+for route, var in passengers.items():
+    print(route, ":", var.value())
+
+# Print the maximum revenue obtained from the optimal allocation
+print("Maximum total revenue:", pulp.value(prob.objective))
